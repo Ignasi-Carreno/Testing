@@ -13,14 +13,16 @@ namespace WebLogin.Controllers
             return View();
         }
 
-        public ActionResult About()
+        [CustomAuthorize(Roles = "PAGE_1")]
+        public ActionResult Page1()
         {
             ViewBag.Message = "Your application description page.";
 
             return View();
         }
 
-        public ActionResult Contact()
+        [CustomAuthorize(Roles = "PAGE_2")]
+        public ActionResult Page2()
         {
             ViewBag.Message = "Your contact page.";
 

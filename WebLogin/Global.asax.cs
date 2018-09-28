@@ -18,6 +18,7 @@ namespace WebLogin
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            RolesConfig.RegisterRoles();
         }
     }
 }
