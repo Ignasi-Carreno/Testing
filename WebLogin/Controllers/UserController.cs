@@ -16,13 +16,14 @@ namespace WebLogin.Controllers
         }
 
         [HttpGet]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Login(Models.User user)
+        public ActionResult Login(Models.User user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
@@ -42,7 +43,7 @@ namespace WebLogin.Controllers
                             Roles.AddUserToRole(user.UserName, "PAGE_2");
                     }
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToLocal(returnUrl);
                 }
                 else
                 {
@@ -51,6 +52,7 @@ namespace WebLogin.Controllers
             }
             return View(user);
         }
+
         public ActionResult Logout()
         {
             FormsAuthentication.SignOut();
@@ -60,6 +62,18 @@ namespace WebLogin.Controllers
         public bool IsValid(string userName, string password)
         {
             return true;
+        }
+
+        private ActionResult RedirectToLocal(string returnUrl)
+        {
+            if (Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
