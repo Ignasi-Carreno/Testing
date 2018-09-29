@@ -1,7 +1,7 @@
 ﻿using System.Web;
 using System.Web.Mvc;
 
-namespace WebLogin
+namespace WebLogin.Site
 {
     public class FilterConfig
     {

@@ -2,7 +2,7 @@
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace WebLogin
+namespace WebLogin.Site
 {
     public class RolesConfig
     {

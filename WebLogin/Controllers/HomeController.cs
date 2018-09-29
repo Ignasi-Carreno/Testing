@@ -1,7 +1,7 @@
 ﻿using System.Web.Mvc;
-using WebLogin.Helpers;
+using WebLogin.Site.Helpers;
 
-namespace WebLogin.Controllers
+namespace WebLogin.Site.Controllers
 {
     public class HomeController : Controller
     {

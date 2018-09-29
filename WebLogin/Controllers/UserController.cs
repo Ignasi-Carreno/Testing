@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 
-namespace WebLogin.Controllers
+namespace WebLogin.Site.Controllers
 {
     public class UserController : Controller
     {

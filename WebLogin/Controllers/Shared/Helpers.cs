@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace WebLogin.Controllers.Shared
+namespace WebLogin.Site.Controllers.Shared
 {
     public class Helpers
     {
