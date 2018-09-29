@@ -21,8 +21,10 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("Page 1", "Page1", "Home")</li>
                     <li>@Html.ActionLink("Page 2", "Page2", "Home")</li>
+                    <li>@Html.ActionLink("Page 3", "Page3", "Home")</li>
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Sign Out", "Logout", "User")</li>
@@ -39,7 +41,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - Mi aplicación ASP.NET</p>
+            <p>&copy; @DateTime.Now.Year - WebLogin</p>
         </footer>
     </div>
 

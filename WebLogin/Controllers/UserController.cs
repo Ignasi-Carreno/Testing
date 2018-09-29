@@ -42,6 +42,12 @@ namespace WebLogin.Controllers
                         if (!Roles.IsUserInRole(user.UserName, "PAGE_2"))
                             Roles.AddUserToRole(user.UserName, "PAGE_2");
                     }
+                    if (user.UserName == "admin")
+                    {
+                        if (!Roles.IsUserInRole(user.UserName, "ADMIN"))
+                            Roles.AddUserToRole(user.UserName, "ADMIN");
+                    }
+
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
                     return RedirectToLocal(returnUrl);
                 }

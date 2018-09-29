@@ -10,19 +10,21 @@ namespace WebLogin.Controllers
             return View();
         }
 
-        [CustomAuthorize(Roles = "PAGE_1")]
+        [CustomAuthorize(Roles = "PAGE_1, ADMIN")]
         public ActionResult Page1()
         {
-            ViewBag.Message = "Your application description page.";
-
             return View();
         }
 
-        [CustomAuthorize(Roles = "PAGE_2")]
+        [CustomAuthorize(Roles = "PAGE_2, ADMIN")]
         public ActionResult Page2()
         {
-            ViewBag.Message = "Your contact page.";
+            return View();
+        }
 
+        [CustomAuthorize(Roles = "PAGE_3, ADMIN")]
+        public ActionResult Page3()
+        {
             return View();
         }
     }

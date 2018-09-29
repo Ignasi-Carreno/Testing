@@ -10,6 +10,11 @@ namespace WebLogin
         {
             if (Roles.Enabled)
             {
+                if (!Roles.RoleExists("ADMIN"))
+                {
+                    Roles.CreateRole("ADMIN");
+                }
+
                 if (!Roles.RoleExists("PAGE_1"))
                 {
                     Roles.CreateRole("PAGE_1");
