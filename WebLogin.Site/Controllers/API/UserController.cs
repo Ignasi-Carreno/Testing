@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
 using WebLogin.IBLL;
 using WebLogin.Site.Models;
@@ -58,7 +55,10 @@ namespace WebLogin.Site.Controllers.API
 
             var objectUser = AutoMapper.Mapper.Map<Objects.User>(user);
             if (userModel.CreateUser(objectUser))
+            {
+                user.Password = null;
                 return CreatedAtRoute("DefaultApi", new { id = user.UserName }, user);
+            }
             else
                 return InternalServerError();
         }
@@ -71,7 +71,10 @@ namespace WebLogin.Site.Controllers.API
                 return NotFound();
 
             if (userModel.UpdateUser(id, AutoMapper.Mapper.Map<Objects.User>(user)))
+            {
+                user.Password = null;
                 return Content(HttpStatusCode.Accepted, user);
+            }
             else
                 return InternalServerError();
         }

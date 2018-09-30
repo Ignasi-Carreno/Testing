@@ -62,6 +62,8 @@ namespace WebLogin.Site.Controllers
 
         public ActionResult Logout()
         {
+            var roles = Roles.GetRolesForUser(User.Identity.Name);
+            Roles.RemoveUserFromRoles(User.Identity.Name, roles);
             FormsAuthentication.SignOut();
             return RedirectToAction("Index", "Home");
         }

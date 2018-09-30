@@ -192,7 +192,6 @@ namespace WebLogin.Site.Controllers.API.Tests
             Assert.AreEqual(Role.PAGE_1, contentResult.Content.Roles[0]);
         }
 
-
         [TestMethod()]
         public void DeleteTest()
         {

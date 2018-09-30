@@ -10,6 +10,9 @@ namespace WebLogin.Site
 {
     public static class UnityConfig
     {
+        /// <summary>
+        /// Register types to be resolved
+        /// </summary>
         public static void RegisterComponents()
         {
 			var container = new UnityContainer();

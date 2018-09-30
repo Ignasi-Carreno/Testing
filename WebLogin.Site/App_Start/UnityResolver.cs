@@ -6,6 +6,9 @@ using Unity.Exceptions;
 
 namespace WebLogin.Site
 {
+    /// <summary>
+    /// Dependency resolver for web api
+    /// </summary>
     public class UnityResolver : IDependencyResolver
     {
         protected IUnityContainer container;

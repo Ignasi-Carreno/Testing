@@ -32,7 +32,7 @@ namespace WebLogin.Site.Helpers
             string userName = null;
             string password = null;
             
-            // Verification.   
+            // Header verification
             if (request.Headers.TryGetValues(ApiInfo.API_KEY_HEADER, out apiKeyHeaderValues) && !string.IsNullOrEmpty(authorization.Parameter))
             {
                 var apiKeyHeaderValue = apiKeyHeaderValues.First();
@@ -47,11 +47,11 @@ namespace WebLogin.Site.Helpers
                 userName = decodedToken.Substring(0, decodedToken.IndexOf(":"));
                 password = decodedToken.Substring(decodedToken.IndexOf(":") + 1);
 
-                //Reolve userModel object
+                //Resolve userModel object
                 var dependencyScope = request.GetDependencyScope();
                 var userModel = dependencyScope.GetService(typeof(IUserModel)) as IUserModel;
 
-                // Verification.   
+                // User verification
                 if (apiKeyHeaderValue.Equals(ApiInfo.API_KEY_VALUE) && userModel.IsValidUser(userName, password))
                 {
                     //Get user roles
@@ -72,12 +72,10 @@ namespace WebLogin.Site.Helpers
         /// <param name="principal">Principal parameter</param>   
         private static void SetPrincipal(IPrincipal principal)
         {
-            // setting.   
             Thread.CurrentPrincipal = principal;
-            // Verification.   
+   
             if (HttpContext.Current != null)
             {
-                // Setting.   
                 HttpContext.Current.User = principal;
             }
         }

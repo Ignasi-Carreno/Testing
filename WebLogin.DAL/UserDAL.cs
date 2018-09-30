@@ -94,6 +94,7 @@ namespace WebLogin.DAL
                     try
                     {
                         SqlCommand command = new SqlCommand(commandText, connection);
+                        command.Transaction = transaction;
                         command.Parameters.AddWithValue("@USER_NAME", userName);
                         command.Parameters.AddWithValue("@PASSWORD", passwordHash);
                         command.ExecuteNonQuery();
@@ -127,6 +128,7 @@ namespace WebLogin.DAL
                     try
                     {
                         SqlCommand command = new SqlCommand(commandText, connection);
+                        command.Transaction = transaction;
                         command.Parameters.AddWithValue("@PASSWORD", passwordHash);
                         command.Parameters.AddWithValue("@USER_NAME", userName);
                         command.ExecuteNonQuery();
