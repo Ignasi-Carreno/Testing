@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using System.Web.Http;
+﻿using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -20,7 +19,7 @@ namespace WebLogin.Site
             AutoMapperConfig.RegisterMappings();
             UnityConfig.RegisterComponents();
 
-            // API authorization registration.    
+            // API authorization registration.
             GlobalConfiguration.Configuration.MessageHandlers.Add(new AuthorizationHeaderHandler());
         }
     }

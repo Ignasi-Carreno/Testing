@@ -86,23 +86,5 @@ namespace WebLogin.Site.Resources.Constants {
                 return ResourceManager.GetString("JSON_CONTENT_TYPE", resourceCulture);
             }
         }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a PasswordForApi.
-        /// </summary>
-        public static string PASSWORD_VALUE {
-            get {
-                return ResourceManager.GetString("PASSWORD_VALUE", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Busca una cadena traducida similar a AuthenticatedApiUser.
-        /// </summary>
-        public static string USERNAME_VALUE {
-            get {
-                return ResourceManager.GetString("USERNAME_VALUE", resourceCulture);
-            }
-        }
     }
 }

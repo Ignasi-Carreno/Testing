@@ -126,10 +126,4 @@
   <data name="JSON_CONTENT_TYPE" xml:space="preserve">
     <value>application/json</value>
   </data>
-  <data name="PASSWORD_VALUE" xml:space="preserve">
-    <value>PasswordForApi</value>
-  </data>
-  <data name="USERNAME_VALUE" xml:space="preserve">
-    <value>AuthenticatedApiUser</value>
-  </data>
 </root>

@@ -22,6 +22,7 @@ namespace WebLogin.DAL
 
             using (SqlConnection connection = new SqlConnection(CONNECTION))
             {
+                connection.Open();
                 var command = new SqlCommand(commandText, connection);
                 var da = new SqlDataAdapter(command);
                 dt = new DataTable();
