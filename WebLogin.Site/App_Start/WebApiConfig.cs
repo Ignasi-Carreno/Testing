@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http;
+using Unity;
+using WebLogin.App_Start;
+using WebLogin.BLL;
+using WebLogin.IBLL;
 
 namespace WebLogin.Site
 {
@@ -9,9 +13,12 @@ namespace WebLogin.Site
     {
         public static void Register(HttpConfiguration config)
         {
-            // Configuración y servicios de API web
+            //Dependency injection
+            var container = new UnityContainer();
+            container.RegisterType<IUserModel, UserModel>();
+            config.DependencyResolver = new UnityResolver(container);
 
-            // Rutas de API web
+            // Routes of API web
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(

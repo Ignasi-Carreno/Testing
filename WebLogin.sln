@@ -3,9 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.Site", "WebLogin\WebLogin.Site.csproj", "{AEC0AE58-DD78-44BB-B0ED-DD8B93E003E4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.Site", "WebLogin.Site\WebLogin.Site.csproj", "{AEC0AE58-DD78-44BB-B0ED-DD8B93E003E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.IBLL", "WebLogin.IBLL\WebLogin.IBLL.csproj", "{FBA94648-4235-46D2-A079-138C67B4612E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.Objects", "WebLogin.Objects\WebLogin.Objects.csproj", "{9EECE45C-6D77-4DA7-AEB1-CF8D101AC5E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.DAL", "WebLogin.DAL\WebLogin.DAL.csproj", "{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebLogin.IDAL", "WebLogin.IDAL\WebLogin.IDAL.csproj", "{ABAE970E-6A30-49E0-877F-705678387D49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "1.DAL", "1.DAL", "{8C874FD0-5389-4722-8A4F-2C7D6A7CC3D2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "2.BLL", "2.BLL", "{4E712660-A479-4216-BB26-1B5CAD4434C9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +31,25 @@ Global
 		{FBA94648-4235-46D2-A079-138C67B4612E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FBA94648-4235-46D2-A079-138C67B4612E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FBA94648-4235-46D2-A079-138C67B4612E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9EECE45C-6D77-4DA7-AEB1-CF8D101AC5E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EECE45C-6D77-4DA7-AEB1-CF8D101AC5E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EECE45C-6D77-4DA7-AEB1-CF8D101AC5E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EECE45C-6D77-4DA7-AEB1-CF8D101AC5E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABAE970E-6A30-49E0-877F-705678387D49}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABAE970E-6A30-49E0-877F-705678387D49}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABAE970E-6A30-49E0-877F-705678387D49}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABAE970E-6A30-49E0-877F-705678387D49}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FBA94648-4235-46D2-A079-138C67B4612E} = {4E712660-A479-4216-BB26-1B5CAD4434C9}
+		{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58} = {8C874FD0-5389-4722-8A4F-2C7D6A7CC3D2}
+		{ABAE970E-6A30-49E0-877F-705678387D49} = {8C874FD0-5389-4722-8A4F-2C7D6A7CC3D2}
 	EndGlobalSection
 EndGlobal
