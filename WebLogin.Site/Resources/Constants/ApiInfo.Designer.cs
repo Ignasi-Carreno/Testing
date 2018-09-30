@@ -39,7 +39,7 @@ namespace WebLogin.Site.Resources.Constants {
         public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebLogin.Resources.Constants.ApiInfo", typeof(ApiInfo).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WebLogin.Site.Resources.Constants.ApiInfo", typeof(ApiInfo).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

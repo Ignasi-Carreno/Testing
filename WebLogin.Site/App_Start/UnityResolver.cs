@@ -4,7 +4,7 @@ using System.Web.Http.Dependencies;
 using Unity;
 using Unity.Exceptions;
 
-namespace WebLogin.App_Start
+namespace WebLogin.Site
 {
     public class UnityResolver : IDependencyResolver
     {

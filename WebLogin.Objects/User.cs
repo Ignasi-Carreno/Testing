@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace WebLogin.Objects
+﻿namespace WebLogin.Objects
 {
     /// <summary>
     /// User of the web site and web Api

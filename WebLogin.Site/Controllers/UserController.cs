@@ -4,11 +4,23 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using WebLogin.IBLL;
 
 namespace WebLogin.Site.Controllers
 {
     public class UserController : Controller
     {
+        private readonly IUserModel userModel;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userModel"></param>
+        public UserController(IUserModel userModel)
+        {
+            this.userModel = userModel;
+        }
+
         // GET: /User/
         public ActionResult Index()
         {
@@ -27,11 +39,11 @@ namespace WebLogin.Site.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (this.IsValid(user.UserName, user.Password))
+                if (IsValid(user))
                 {
                     if (user.UserName == "user1")
                     {
-                        if(!Roles.IsUserInRole(user.UserName, "PAGE_1"))
+                        if (!Roles.IsUserInRole(user.UserName, "PAGE_1"))
                             Roles.AddUserToRole(user.UserName, "PAGE_1");
                     }
                     if (user.UserName == "user2")
@@ -47,6 +59,9 @@ namespace WebLogin.Site.Controllers
                         if (!Roles.IsUserInRole(user.UserName, "ADMIN"))
                             Roles.AddUserToRole(user.UserName, "ADMIN");
                     }
+
+                    //var roles = userModel.GetUserRoles(user.UserName);
+                    //roles
 
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
                     return RedirectToLocal(returnUrl);
@@ -65,9 +80,9 @@ namespace WebLogin.Site.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public bool IsValid(string userName, string password)
+        public bool IsValid(Models.User user)
         {
-            return true;
+            return userModel.IsValidUser(AutoMapper.Mapper.Map<Models.User, Objects.User>(user));
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

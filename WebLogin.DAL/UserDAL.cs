@@ -17,14 +17,17 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public List<string> GetUserNames()
         {
-            var conn = new SqlConnection(CONNECTION);
-            conn.Open();
-            var cmd = new SqlCommand(@"select UserName from Users", conn);
-            var da = new SqlDataAdapter(cmd);
-            var dt = new DataTable();
-            da.Fill(dt);
-            cmd.ExecuteReader();
-            conn.Close();
+            DataTable dt;
+            var commandText = @"select UserName from Users";
+
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                var command = new SqlCommand(commandText, connection);
+                var da = new SqlDataAdapter(command);
+                dt = new DataTable();
+                da.Fill(dt);
+                command.ExecuteReader();
+            }
 
             var users = new List<string>();
 
@@ -43,7 +46,34 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public List<Role> GetUserRoles(string userName)
         {
-            throw new NotImplementedException();
+            DataTable dt;
+            var commandText = @"select Role from UserRoles where UserName = @USER_NAME";
+
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                var command = new SqlCommand(commandText, connection);
+                command.Parameters.Add("@USER_NAME", SqlDbType.NVarChar);
+                command.Parameters["@USER_NAME"].Value = userName;
+
+                var da = new SqlDataAdapter(command);
+                dt = new DataTable();
+                da.Fill(dt);
+                command.ExecuteReader();
+            }
+
+            var roles = new List<Role>();
+
+            foreach (DataRow row in dt.Rows)
+            {
+                Role role;
+                var dbString = row["Role"].ToString();
+
+                if (Enum.TryParse(dbString, out role))
+                    roles.Add(role);
+            }
+
+            return roles;
         }
 
         /// <summary>
@@ -86,7 +116,25 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public bool IsValidUser(string userName, string passwordHash)
         {
-            throw new NotImplementedException();
+            DataTable dt;
+            var commandText = @"select 1 from Users where UserName = @USER_NAME and Password = @PASSWORD_HASH";
+
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                var command = new SqlCommand(commandText, connection);
+                command.Parameters.Add("@USER_NAME", SqlDbType.NVarChar);
+                command.Parameters["@USER_NAME"].Value = userName;
+                command.Parameters.Add("@PASSWORD_HASH", SqlDbType.NVarChar);
+                command.Parameters["@PASSWORD_HASH"].Value = passwordHash;
+
+                var da = new SqlDataAdapter(command);
+                dt = new DataTable();
+                da.Fill(dt);
+                command.ExecuteReader();
+            }
+
+            return dt.Rows.Count > 0;
         }
     }
 }

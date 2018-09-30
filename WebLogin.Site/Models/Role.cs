@@ -1,4 +1,4 @@
-﻿namespace WebLogin.Models
+﻿namespace WebLogin.Site.Models
 {
     /// <summary>
     /// Roles to access to different parts
