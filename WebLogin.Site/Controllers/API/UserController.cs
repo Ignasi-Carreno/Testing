@@ -26,7 +26,7 @@ namespace WebLogin.Site.Controllers.API
         // GET: api/User
         public IHttpActionResult Get()
         {
-            var users = userModel.GetUsers().Select(user => AutoMapper.Mapper.Map<User>(user));
+            var users = userModel.GetUsers().Select(user => AutoMapper.Mapper.Map<User>(user)).ToList();
 
             return Ok(users);
         }
@@ -56,8 +56,9 @@ namespace WebLogin.Site.Controllers.API
             if (userModel.UserExist(user.UserName))
                 return BadRequest("The user already exist");
 
-            if (userModel.CreateUser(AutoMapper.Mapper.Map<Objects.User>(user)))
-                return Ok();
+            var objectUser = AutoMapper.Mapper.Map<Objects.User>(user);
+            if (userModel.CreateUser(objectUser))
+                return CreatedAtRoute("DefaultApi", new { id = user.UserName }, user);
             else
                 return InternalServerError();
         }
@@ -70,7 +71,7 @@ namespace WebLogin.Site.Controllers.API
                 return NotFound();
 
             if (userModel.UpdateUser(id, AutoMapper.Mapper.Map<Objects.User>(user)))
-                return Ok();
+                return Content(HttpStatusCode.Accepted, user);
             else
                 return InternalServerError();
         }
