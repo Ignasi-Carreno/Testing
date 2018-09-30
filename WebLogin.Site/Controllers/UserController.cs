@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
 using WebLogin.IBLL;
+using WebLogin.Site.Models;
 
 namespace WebLogin.Site.Controllers
 {
@@ -35,33 +36,18 @@ namespace WebLogin.Site.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(Models.User user, string returnUrl)
+        public ActionResult Login(User user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 if (IsValid(user))
                 {
-                    if (user.UserName == "user1")
+                    var userRoles = userModel.GetUserRoles(user.UserName).Select(x => AutoMapper.Mapper.Map<Role>(x));
+                    foreach (var role in userRoles)
                     {
-                        if (!Roles.IsUserInRole(user.UserName, "PAGE_1"))
-                            Roles.AddUserToRole(user.UserName, "PAGE_1");
+                        if (!Roles.IsUserInRole(user.UserName, role.ToString()))
+                            Roles.AddUserToRole(user.UserName, role.ToString());
                     }
-                    if (user.UserName == "user2")
-                    {
-                        if (!Roles.IsUserInRole(user.UserName, "PAGE_1"))
-                            Roles.AddUserToRole(user.UserName, "PAGE_1");
-
-                        if (!Roles.IsUserInRole(user.UserName, "PAGE_2"))
-                            Roles.AddUserToRole(user.UserName, "PAGE_2");
-                    }
-                    if (user.UserName == "admin")
-                    {
-                        if (!Roles.IsUserInRole(user.UserName, "ADMIN"))
-                            Roles.AddUserToRole(user.UserName, "ADMIN");
-                    }
-
-                    //var roles = userModel.GetUserRoles(user.UserName);
-                    //roles
 
                     FormsAuthentication.SetAuthCookie(user.UserName, false);
                     return RedirectToLocal(returnUrl);
@@ -80,9 +66,9 @@ namespace WebLogin.Site.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public bool IsValid(Models.User user)
+        public bool IsValid(User user)
         {
-            return userModel.IsValidUser(AutoMapper.Mapper.Map<Models.User, Objects.User>(user));
+            return userModel.IsValidUser(AutoMapper.Mapper.Map<User, Objects.User>(user));
         }
 
         private ActionResult RedirectToLocal(string returnUrl)
