@@ -8,7 +8,7 @@ using WebLogin.IBLL;
 
 namespace WebLogin.Site.Controllers.API
 {
-    [Authorize]
+    [Authorize(Roles = "ADMIN")]
     public class UserController : ApiController
     {
         private readonly IUserModel userModel;

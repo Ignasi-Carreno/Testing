@@ -15,7 +15,7 @@ using WebLogin.Site.Resources.Constants;
 namespace WebLogin.Site.Helpers
 {
     /// <summary>   
-    /// Authorization for web API class.   
+    /// Authorization for web API.   
     /// </summary>   
     public class AuthorizationHeaderHandler : DelegatingHandler
     {
@@ -56,12 +56,15 @@ namespace WebLogin.Site.Helpers
                 // Verification.   
                 if (apiKeyHeaderValue.Equals(ApiInfo.API_KEY_VALUE) && userModel.IsValidUser(AutoMapper.Mapper.Map<Objects.User>(user)))
                 {
-                    // Setting
+                    //Get user roles
+                    var userRoles = userModel.GetUserRoles(userName).Select(x => x.ToString());
+
+                    // Set identity
                     var identity = new GenericIdentity(userName);
-                    SetPrincipal(new GenericPrincipal(identity, null));
+                    SetPrincipal(new GenericPrincipal(identity, userRoles.ToArray()));
                 }
             }
-            // Info.   
+            // Info.
             return base.SendAsync(request, cancellationToken);
         }
 
