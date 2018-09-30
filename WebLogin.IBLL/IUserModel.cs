@@ -19,6 +19,13 @@ namespace WebLogin.IBLL
         User GetUser(string userName);
 
         /// <summary>
+        /// Check if user exist
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        bool UserExist(string userName);
+
+        /// <summary>
         /// Creates a new user
         /// </summary>
         /// <param name="user"></param>

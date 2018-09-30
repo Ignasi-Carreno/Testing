@@ -56,5 +56,13 @@ namespace WebLogin.IDAL
         /// <param name="passwordHash"></param>
         /// <returns></returns>
         bool IsValidUser(string userName, string passwordHash);
+
+        /// <summary>
+        /// Check if user exist
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        bool UserExist(string userName);
+
     }
 }

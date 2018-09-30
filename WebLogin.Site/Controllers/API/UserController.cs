@@ -24,36 +24,68 @@ namespace WebLogin.Site.Controllers.API
         }
 
         // GET: api/User
-        public IEnumerable<User> Get()
+        public IHttpActionResult Get()
         {
-            return userModel.GetUsers().Select(user => AutoMapper.Mapper.Map<User>(user));
+            var users = userModel.GetUsers().Select(user => AutoMapper.Mapper.Map<User>(user));
+
+            return Ok(users);
         }
 
         // GET: api/User/UserName
-        public User Get(string userName)
+        public IHttpActionResult Get(string id)
         {
-            return AutoMapper.Mapper.Map<User>(userModel.GetUser(userName));
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var user = AutoMapper.Mapper.Map<User>(userModel.GetUser(id));
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+            return Ok(user);
         }
 
         // POST: api/User
         [Authorize(Roles = "ADMIN")]
-        public void Post([FromBody]User user)
+        public IHttpActionResult Post([FromBody]User user)
         {
-            userModel.CreateUser(AutoMapper.Mapper.Map<Objects.User>(user));
+            if (user == null)
+                return BadRequest("User can't be empty");
+
+            if (userModel.UserExist(user.UserName))
+                return BadRequest("The user already exist");
+
+            if (userModel.CreateUser(AutoMapper.Mapper.Map<Objects.User>(user)))
+                return Ok();
+            else
+                return InternalServerError();
         }
 
-        // PUT: api/User/5
+        // PUT: api/User/UserName
         [Authorize(Roles = "ADMIN")]
-        public void Put(string userName, [FromBody]User user)
+        public IHttpActionResult Put(string id, [FromBody]User user)
         {
-            userModel.UpdateUser(userName, AutoMapper.Mapper.Map<Objects.User>(user));
+            if (string.IsNullOrEmpty(id) || !userModel.UserExist(id))
+                return NotFound();
+
+            if (userModel.UpdateUser(id, AutoMapper.Mapper.Map<Objects.User>(user)))
+                return Ok();
+            else
+                return InternalServerError();
         }
 
         // DELETE: api/User/5
         [Authorize(Roles = "ADMIN")]
-        public void Delete(string userName)
+        public IHttpActionResult Delete(string id)
         {
-            userModel.DeleteUser(userName);
+            if (string.IsNullOrEmpty(id) || !userModel.UserExist(id))
+                return NotFound();
+
+            if (userModel.DeleteUser(id))
+                return Ok();
+            else
+                return InternalServerError();
         }
     }
 }

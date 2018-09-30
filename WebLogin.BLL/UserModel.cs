@@ -42,6 +42,8 @@ namespace WebLogin.BLL
         /// <returns></returns>
         public User GetUser(string userName)
         {
+            if (!UserExist(userName)) return null;
+
             var user = new User()
             {
                 UserName = userName,
@@ -120,6 +122,16 @@ namespace WebLogin.BLL
             var encoder = new System.Text.ASCIIEncoding();
             var combined = encoder.GetBytes(value ?? "");
             return BitConverter.ToString(hash.ComputeHash(combined)).ToLower().Replace("-", "");
+        }
+
+        /// <summary>
+        /// Check if user exist
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public bool UserExist(string userName)
+        {
+            return userDal.UserExist(userName);
         }
     }
 }

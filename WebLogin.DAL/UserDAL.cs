@@ -86,22 +86,27 @@ namespace WebLogin.DAL
         public bool CreateUser(string userName, string passwordHash)
         {
             var commandText = @"INSERT INTO Users(UserName, Password) VALUES(@USER_NAME, @PASSWORD)";
-            try
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
             {
-                using (SqlConnection connection = new SqlConnection(CONNECTION))
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(commandText, connection);
-                    command.Parameters.AddWithValue("@USER_NAME", userName);
-                    command.Parameters.AddWithValue("@PASSWORD", passwordHash);
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        SqlCommand command = new SqlCommand(commandText, connection);
+                        command.Parameters.AddWithValue("@USER_NAME", userName);
+                        command.Parameters.AddWithValue("@PASSWORD", passwordHash);
+                        command.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
                 }
 
                 return true;
-            }
-            catch(Exception)
-            {
-                return false;
             }
         }
 
@@ -114,23 +119,27 @@ namespace WebLogin.DAL
         public bool ChangeUserPassword(string userName, string passwordHash)
         {
             var commandText = @"UPDATE Users SET Password=@PASSWORD WHERE UserName=@USER_NAME";
-            try
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
             {
-                using (SqlConnection connection = new SqlConnection(CONNECTION))
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
                 {
-                    connection.Open();
-                    SqlCommand command = new SqlCommand(commandText, connection);
-                    command.Parameters.AddWithValue("@PASSWORD", passwordHash);
-                    command.Parameters.AddWithValue("@USER_NAME", userName);
-                    command.ExecuteNonQuery();
+                    try
+                    {
+                        SqlCommand command = new SqlCommand(commandText, connection);
+                        command.Parameters.AddWithValue("@PASSWORD", passwordHash);
+                        command.Parameters.AddWithValue("@USER_NAME", userName);
+                        command.ExecuteNonQuery();
+                        transaction.Commit();
+                    }
+                    catch(Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
+                    }
                 }
-
-                return true;
             }
-            catch (Exception)
-            {
-                return false;
-            }
+            return true;
         }
 
         /// <summary>
@@ -141,6 +150,33 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public bool SetUserRoles(string userName, List<Role> roles)
         {
+            //Delete current roles
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        try
+                        {
+                            command.CommandText = @"DELETE FROM UserRoles WHERE UserName = @USER_NAME";
+                            command.Transaction = transaction;
+                            command.CommandType = CommandType.Text;
+                            command.Parameters.AddWithValue("@USER_NAME", userName);
+                            command.ExecuteNonQuery();
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+            }
+            
+            //Insert new roles
             using (SqlConnection connection = new SqlConnection(CONNECTION))
             {
                 connection.Open();
@@ -189,9 +225,18 @@ namespace WebLogin.DAL
                 connection.Open();
                 using (SqlTransaction transaction = connection.BeginTransaction())
                 {
-                    using (SqlCommand command = connection.CreateCommand())
+                    try
                     {
-                        try
+                        using (SqlCommand command = connection.CreateCommand())
+                        {
+                            //Delete from UserRoles
+                            command.CommandText = @"DELETE FROM UserRoles WHERE UserName = @USER_NAME";
+                            command.Transaction = transaction;
+                            command.CommandType = CommandType.Text;
+                            command.Parameters.AddWithValue("@USER_NAME", userName);
+                            command.ExecuteNonQuery();
+                        }
+                        using (SqlCommand command = connection.CreateCommand())
                         {
                             //Delete from Users
                             command.CommandText = @"DELETE FROM Users WHERE UserName = @USER_NAME";
@@ -202,22 +247,13 @@ namespace WebLogin.DAL
                             {
                                 throw new InvalidProgramException();
                             }
-
-                            //Delete from UserRoles
-                            command.CommandText = @"DELETE FROM UserRoles WHERE UserName = @USER_NAME";
-                            command.Transaction = transaction;
-                            command.CommandType = CommandType.Text;
-                            command.Parameters.AddWithValue("@USER_NAME", userName);
-                            if (command.ExecuteNonQuery() != 1)
-                            {
-                                throw new InvalidProgramException();
-                            }
                         }
-                        catch (Exception)
-                        {
-                            transaction.Rollback();
-                            return false;
-                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception)
+                    {
+                        transaction.Rollback();
+                        return false;
                     }
                 }
             }
@@ -239,12 +275,36 @@ namespace WebLogin.DAL
             {
                 connection.Open();
                 var command = new SqlCommand(commandText, connection);
-                command.Parameters.Add("@USER_NAME", SqlDbType.NVarChar);
-                command.Parameters["@USER_NAME"].Value = userName;
-                command.Parameters.Add("@PASSWORD_HASH", SqlDbType.NVarChar);
-                command.Parameters["@PASSWORD_HASH"].Value = passwordHash;
+                command.Parameters.AddWithValue("@USER_NAME", userName);
+                command.Parameters.AddWithValue("@PASSWORD_HASH", passwordHash);
 
                 var da = new SqlDataAdapter(command);
+                dt = new DataTable();
+                da.Fill(dt);
+                command.ExecuteReader();
+            }
+
+            return dt.Rows.Count > 0;
+        }
+
+        /// <summary>
+        /// Check if user exist
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        public bool UserExist(string userName)
+        {
+            if (string.IsNullOrEmpty(userName)) return false;
+
+            DataTable dt;
+            var commandText = @"select 1 from Users WHERE UserName = @USER_NAME";
+
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                var command = new SqlCommand(commandText, connection);
+                var da = new SqlDataAdapter(command);
+                command.Parameters.AddWithValue("@USER_NAME", userName);
                 dt = new DataTable();
                 da.Fill(dt);
                 command.ExecuteReader();
