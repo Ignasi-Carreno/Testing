@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using WebLogin.IBLL;
 using WebLogin.IDAL;
 using WebLogin.Objects;
@@ -23,19 +24,31 @@ namespace WebLogin.BLL
         /// Obtain a list of all user names
         /// </summary>
         /// <returns></returns>
-        public List<string> GetUserNames()
+        public List<User> GetUsers()
         {
-            return userDal.GetUserNames();
+            var users = userDal.GetUserNames().Select(userName => new User()
+            {
+                UserName = userName,
+                Roles = userDal.GetUserRoles(userName)
+            });
+
+            return users.ToList();
         }
 
         /// <summary>
-        /// Obtain roles for a user name
+        /// Obtain a user
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        public List<Role> GetUserRoles(string userName)
+        public User GetUser(string userName)
         {
-            return userDal.GetUserRoles(userName);
+            var user = new User()
+            {
+                UserName = userName,
+                Roles = userDal.GetUserRoles(userName)
+            };
+
+            return user;
         }
 
         /// <summary>
@@ -45,18 +58,34 @@ namespace WebLogin.BLL
         /// <returns></returns>
         public bool CreateUser(User user)
         {
-            throw new NotImplementedException();
+            if(userDal.CreateUser(user.UserName, EncodeSHA1(user.Password)))
+            {
+                return userDal.SetUserRoles(user.UserName, user.Roles);
+            }
+
+            return false;
         }
 
         /// <summary>
-        /// Set the roles for a user name
+        /// Update user information
         /// </summary>
         /// <param name="userName"></param>
-        /// <param name="roles"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public bool SetUserRoles(string userName, List<Role> roles)
+        public bool UpdateUser(string userName, User user)
         {
-            throw new NotImplementedException();
+            bool operationFail = false;
+            if (!string.IsNullOrEmpty(user.Password))
+            {
+                operationFail = !userDal.ChangeUserPassword(user.UserName, EncodeSHA1(user.Password));
+            }
+            
+            if(!operationFail && user.Roles != null)
+            {
+                operationFail = !userDal.SetUserRoles(user.UserName, user.Roles);
+            }
+
+            return !operationFail;
         }
 
         /// <summary>
@@ -66,17 +95,18 @@ namespace WebLogin.BLL
         /// <returns></returns>
         public bool DeleteUser(string userName)
         {
-            throw new NotImplementedException();
+            return userDal.DeleteUser(userName);
         }
 
         /// <summary>
         /// Indicates if user name and password are correct
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        public bool IsValidUser(User user)
+        public bool IsValidUser(string userName, string password)
         {
-            return userDal.IsValidUser(user.UserName, EncodeSHA1(user.Password));
+            return userDal.IsValidUser(userName, EncodeSHA1(password));
         }
 
         /// <summary>

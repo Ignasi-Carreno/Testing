@@ -35,6 +35,14 @@ namespace WebLogin.IDAL
         bool SetUserRoles(string userName, List<Role> roles);
 
         /// <summary>
+        /// Change the user password
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns></returns>
+        bool ChangeUserPassword(string userName, string passwordHash);
+
+        /// <summary>
         /// Delete a user
         /// </summary>
         /// <param name="userName"></param>

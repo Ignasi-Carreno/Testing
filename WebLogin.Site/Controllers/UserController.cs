@@ -36,13 +36,13 @@ namespace WebLogin.Site.Controllers
         }
 
         [HttpPost]
-        public ActionResult Login(User user, string returnUrl)
+        public ActionResult Login(UserViewModel user, string returnUrl)
         {
             if (ModelState.IsValid)
             {
                 if (IsValid(user))
                 {
-                    var userRoles = userModel.GetUserRoles(user.UserName).Select(x => AutoMapper.Mapper.Map<Role>(x));
+                    var userRoles = userModel.GetUser(user.UserName).Roles.Select(role => AutoMapper.Mapper.Map<Role>(role));
                     foreach (var role in userRoles)
                     {
                         if (!Roles.IsUserInRole(user.UserName, role.ToString()))
@@ -66,9 +66,9 @@ namespace WebLogin.Site.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        public bool IsValid(User user)
+        public bool IsValid(UserViewModel user)
         {
-            return userModel.IsValidUser(AutoMapper.Mapper.Map<User, Objects.User>(user));
+            return userModel.IsValidUser(user.UserName, user.Password);
         }
 
         private ActionResult RedirectToLocal(string returnUrl)

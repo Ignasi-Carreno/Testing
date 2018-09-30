@@ -85,7 +85,52 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public bool CreateUser(string userName, string passwordHash)
         {
-            throw new NotImplementedException();
+            var commandText = @"INSERT INTO Users(UserName, Password) VALUES(@USER_NAME, @PASSWORD)";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("@USER_NAME", userName);
+                    command.Parameters.AddWithValue("@PASSWORD", passwordHash);
+                    command.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Change the user password
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="passwordHash"></param>
+        /// <returns></returns>
+        public bool ChangeUserPassword(string userName, string passwordHash)
+        {
+            var commandText = @"UPDATE Users SET Password=@PASSWORD WHERE UserName=@USER_NAME";
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(CONNECTION))
+                {
+                    connection.Open();
+                    SqlCommand command = new SqlCommand(commandText, connection);
+                    command.Parameters.AddWithValue("@PASSWORD", passwordHash);
+                    command.Parameters.AddWithValue("@USER_NAME", userName);
+                    command.ExecuteNonQuery();
+                }
+
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -96,7 +141,40 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public bool SetUserRoles(string userName, List<Role> roles)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        command.Transaction = transaction;
+                        command.CommandType = CommandType.Text;
+                        command.CommandText = "INSERT INTO UserRoles(UserName, Role) VALUES (@USER_NAME, @ROLE);";
+                        command.Parameters.Add(new SqlParameter("@USER_NAME", SqlDbType.NVarChar));
+                        command.Parameters.Add(new SqlParameter("@ROLE", SqlDbType.NVarChar));
+                        try
+                        {
+                            foreach (var role in roles)
+                            {
+                                command.Parameters[0].Value = userName;
+                                command.Parameters[1].Value = role;
+                                if (command.ExecuteNonQuery() != 1)
+                                {
+                                    throw new InvalidProgramException();
+                                }
+                            }
+                            transaction.Commit();
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>
@@ -106,7 +184,44 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public bool DeleteUser(string userName)
         {
-            throw new NotImplementedException();
+            using (SqlConnection connection = new SqlConnection(CONNECTION))
+            {
+                connection.Open();
+                using (SqlTransaction transaction = connection.BeginTransaction())
+                {
+                    using (SqlCommand command = connection.CreateCommand())
+                    {
+                        try
+                        {
+                            //Delete from Users
+                            command.CommandText = @"DELETE FROM Users WHERE UserName = @USER_NAME";
+                            command.Transaction = transaction;
+                            command.CommandType = CommandType.Text;
+                            command.Parameters.AddWithValue("@USER_NAME", userName);
+                            if (command.ExecuteNonQuery() != 1)
+                            {
+                                throw new InvalidProgramException();
+                            }
+
+                            //Delete from UserRoles
+                            command.CommandText = @"DELETE FROM UserRoles WHERE UserName = @USER_NAME";
+                            command.Transaction = transaction;
+                            command.CommandType = CommandType.Text;
+                            command.Parameters.AddWithValue("@USER_NAME", userName);
+                            if (command.ExecuteNonQuery() != 1)
+                            {
+                                throw new InvalidProgramException();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
         }
 
         /// <summary>

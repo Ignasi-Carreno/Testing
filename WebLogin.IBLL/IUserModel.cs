@@ -9,14 +9,14 @@ namespace WebLogin.IBLL
         /// Obtain a list of all user names
         /// </summary>
         /// <returns></returns>
-        List<string> GetUserNames();
+        List<User> GetUsers();
 
         /// <summary>
-        /// Obtain roles for a user name
+        /// Obtain a user
         /// </summary>
         /// <param name="userName"></param>
         /// <returns></returns>
-        List<Role> GetUserRoles(string userName);
+        User GetUser(string userName);
 
         /// <summary>
         /// Creates a new user
@@ -26,12 +26,12 @@ namespace WebLogin.IBLL
         bool CreateUser(User user);
 
         /// <summary>
-        /// Set the roles for a user name
+        /// Update user information
         /// </summary>
         /// <param name="userName"></param>
-        /// <param name="roles"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        bool SetUserRoles(string userName, List<Role> roles);
+        bool UpdateUser(string userName, User user);
 
         /// <summary>
         /// Delete a user
@@ -43,8 +43,9 @@ namespace WebLogin.IBLL
         /// <summary>
         /// Indicates if user name and password are correct
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
-        bool IsValidUser(User user);
+        bool IsValidUser(string userName, string password);
     }
 }

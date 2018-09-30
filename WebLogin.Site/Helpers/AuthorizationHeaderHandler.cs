@@ -9,7 +9,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using WebLogin.IBLL;
-using WebLogin.Site.Models;
 using WebLogin.Site.Resources.Constants;
 
 namespace WebLogin.Site.Helpers
@@ -47,17 +46,16 @@ namespace WebLogin.Site.Helpers
                 // Extract username and password from decoded token   
                 userName = decodedToken.Substring(0, decodedToken.IndexOf(":"));
                 password = decodedToken.Substring(decodedToken.IndexOf(":") + 1);
-                var user = new User() { UserName = userName, Password = password };
 
                 //Reolve userModel object
                 var dependencyScope = request.GetDependencyScope();
                 var userModel = dependencyScope.GetService(typeof(IUserModel)) as IUserModel;
 
                 // Verification.   
-                if (apiKeyHeaderValue.Equals(ApiInfo.API_KEY_VALUE) && userModel.IsValidUser(AutoMapper.Mapper.Map<Objects.User>(user)))
+                if (apiKeyHeaderValue.Equals(ApiInfo.API_KEY_VALUE) && userModel.IsValidUser(userName, password))
                 {
                     //Get user roles
-                    var userRoles = userModel.GetUserRoles(userName).Select(x => x.ToString());
+                    var userRoles = userModel.GetUser(userName).Roles.Select(role => role.ToString());
 
                     // Set identity
                     var identity = new GenericIdentity(userName);

@@ -5,10 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WebLogin.IBLL;
+using WebLogin.Site.Models;
 
 namespace WebLogin.Site.Controllers.API
 {
-    [Authorize(Roles = "ADMIN")]
+    [Authorize()]
     public class UserController : ApiController
     {
         private readonly IUserModel userModel;
@@ -23,30 +24,36 @@ namespace WebLogin.Site.Controllers.API
         }
 
         // GET: api/User
-        public IEnumerable<string> Get()
+        public IEnumerable<User> Get()
         {
-            return userModel.GetUserNames();
+            return userModel.GetUsers().Select(user => AutoMapper.Mapper.Map<User>(user));
         }
 
-        // GET: api/User/5
-        public string Get(int id)
+        // GET: api/User/UserName
+        public User Get(string userName)
         {
-            return "value";
+            return AutoMapper.Mapper.Map<User>(userModel.GetUser(userName));
         }
 
         // POST: api/User
-        public void Post([FromBody]string value)
+        [Authorize(Roles = "ADMIN")]
+        public void Post([FromBody]User user)
         {
+            userModel.CreateUser(AutoMapper.Mapper.Map<Objects.User>(user));
         }
 
         // PUT: api/User/5
-        public void Put(int id, [FromBody]string value)
+        [Authorize(Roles = "ADMIN")]
+        public void Put(string userName, [FromBody]User user)
         {
+            userModel.UpdateUser(userName, AutoMapper.Mapper.Map<Objects.User>(user));
         }
 
         // DELETE: api/User/5
-        public void Delete(int id)
+        [Authorize(Roles = "ADMIN")]
+        public void Delete(string userName)
         {
+            userModel.DeleteUser(userName);
         }
     }
 }
