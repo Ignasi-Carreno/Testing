@@ -215,13 +215,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\WebLogin.BLL\WebLogin.DAL.csproj">
+    <ProjectReference Include="..\WebLogin.BLL\WebLogin.BLL.csproj">
+      <Project>{9AA2B23F-269B-4CD0-95AE-7B50598D85BC}</Project>
+      <Name>WebLogin.BLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebLogin.DAL\WebLogin.DAL.csproj">
       <Project>{0EEEB2DB-CEE3-405C-B041-2217CEEF9E58}</Project>
       <Name>WebLogin.DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\WebLogin.IBLL\WebLogin.IBLL.csproj">
       <Project>{FBA94648-4235-46D2-A079-138C67B4612E}</Project>
       <Name>WebLogin.IBLL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WebLogin.IDAL\WebLogin.IDAL.csproj">
+      <Project>{ABAE970E-6A30-49E0-877F-705678387D49}</Project>
+      <Name>WebLogin.IDAL</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

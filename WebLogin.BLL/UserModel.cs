@@ -1,15 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
+using WebLogin.IBLL;
 using WebLogin.IDAL;
 using WebLogin.Objects;
 
-namespace WebLogin.DAL
+namespace WebLogin.BLL
 {
-    public class UserDAL : IUserDAL
+    public class UserModel : IUserModel
     {
-        private const string CONNECTION = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ignas\Documents\Repos\WebLogin\WebLogin.DAL\Database.mdf;Integrated Security=True";
+        private readonly IUserDAL userDal;
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="userDal"></param>
+        public UserModel(IUserDAL userDal)
+        {
+            this.userDal = userDal;
+        }
 
         /// <summary>
         /// Obtain a list of all user names
@@ -17,23 +25,7 @@ namespace WebLogin.DAL
         /// <returns></returns>
         public List<string> GetUserNames()
         {
-            var conn = new SqlConnection(CONNECTION);
-            conn.Open();
-            var cmd = new SqlCommand(@"select UserName from Users", conn);
-            var da = new SqlDataAdapter(cmd);
-            var dt = new DataTable();
-            da.Fill(dt);
-            cmd.ExecuteReader();
-            conn.Close();
-
-            var users = new List<string>();
-
-            foreach(DataRow row in dt.Rows)
-            {
-                users.Add(row["UserName"].ToString());
-            }
-
-            return users;
+            return userDal.GetUserNames();
         }
 
         /// <summary>
@@ -49,10 +41,9 @@ namespace WebLogin.DAL
         /// <summary>
         /// Creates a new user
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="passwordHash"></param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public bool CreateUser(string userName, string passwordHash)
+        public bool CreateUser(User user)
         {
             throw new NotImplementedException();
         }
@@ -81,10 +72,9 @@ namespace WebLogin.DAL
         /// <summary>
         /// Indicates if user name and password are correct
         /// </summary>
-        /// <param name="userName"></param>
-        /// <param name="passwordHash"</param>
+        /// <param name="user"></param>
         /// <returns></returns>
-        public bool IsValidUser(string userName, string passwordHash)
+        public bool IsValidUser(User user)
         {
             throw new NotImplementedException();
         }

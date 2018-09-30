@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Unity;
 using WebLogin.App_Start;
 using WebLogin.BLL;
+using WebLogin.DAL;
 using WebLogin.IBLL;
+using WebLogin.IDAL;
 
 namespace WebLogin.Site
 {
@@ -15,6 +14,7 @@ namespace WebLogin.Site
         {
             //Dependency injection
             var container = new UnityContainer();
+            container.RegisterType<IUserDAL, UserDAL>();
             container.RegisterType<IUserModel, UserModel>();
             config.DependencyResolver = new UnityResolver(container);
 

@@ -21,9 +21,10 @@ namespace WebLogin.IDAL
         /// <summary>
         /// Creates a new user
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userName"></param>
+        /// <param name="passwordHash"></param>
         /// <returns></returns>
-        bool CreateUser(User user);
+        bool CreateUser(string userName, string passwordHash);
 
         /// <summary>
         /// Set the roles for a user name
@@ -43,8 +44,9 @@ namespace WebLogin.IDAL
         /// <summary>
         /// Indicates if user name and password are correct
         /// </summary>
-        /// <param name="user"></param>
+        /// <param name="userName"></param>
+        /// <param name="passwordHash"></param>
         /// <returns></returns>
-        bool IsValidUser(User user);
+        bool IsValidUser(string userName, string passwordHash);
     }
 }
