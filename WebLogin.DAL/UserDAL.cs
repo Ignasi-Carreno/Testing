@@ -10,7 +10,7 @@ namespace WebLogin.DAL
 {
     public class UserDAL : IUserDAL
     {
-        private string CONNECTION = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DB\\Database.mdf") +"; Integrated Security=True";
+        private const string CONNECTION = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database.mdf; Integrated Security=True";
 
         /// <summary>
         /// Obtain a list of all user names
