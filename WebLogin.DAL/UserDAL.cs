@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.IO;
 using WebLogin.IDAL;
 using WebLogin.Objects;
 
@@ -9,7 +10,7 @@ namespace WebLogin.DAL
 {
     public class UserDAL : IUserDAL
     {
-        private const string CONNECTION = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Users\ignas\Documents\Repos\WebLogin\WebLogin.DAL\Database.mdf;Integrated Security=True";
+        private string CONNECTION = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "DB\\Database.mdf") +"; Integrated Security=True";
 
         /// <summary>
         /// Obtain a list of all user names
